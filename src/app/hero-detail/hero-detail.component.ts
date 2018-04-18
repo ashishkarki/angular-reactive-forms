@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { states } from '../data-model';
+import { states, Address, Hero, heroes } from '../data-model';
 
 
 @Component({
@@ -9,34 +9,38 @@ import { states } from '../data-model';
   templateUrl: './hero-detail.component.html',
   styleUrls: ['./hero-detail.component.css']
 })
-export class HeroDetailComponent implements OnInit {
-	
-	heroForm: FormGroup; 
-	states = states;
-	// = new FormGroup({
-	// 	name: new FormControl()
-	// });
+export class HeroDetailComponent implements OnChanges {
+  @Input() hero: Hero;
 
-  constructor(private formBuilder: FormBuilder) { 
-  	this.createForm();
+  heroForm: FormGroup;
+  states = states;
+
+  constructor(private fb: FormBuilder) {
+    this.createForm();
   }
 
-  ngOnInit() {
-  }
-
-  createForm(){
-  	this.heroForm = this.formBuilder.group({
-  		name: ['', Validators.required ],
-      
-      address: this.formBuilder.group({
-      	street: '',
-      	city: '',
-      	state: '',
-      	zip: '',		
+  createForm() {
+    this.heroForm = this.fb.group({
+      name: ['', Validators.required ],
+      address: this.fb.group({
+        street: '',
+        city: '',
+        state: '',
+        zip: ''
       }),
-
       power: '',
       sidekick: ''
-  	});
+    });
+  }
+
+  ngOnChanges() { // <-- call rebuildForm in ngOnChanges
+    this.rebuildForm();
+  }
+
+  rebuildForm() { // <-- wrap patchValue in rebuildForm
+    this.heroForm.reset();
+    this.heroForm.patchValue({
+      name: this.hero.name
+    });
   }
 }
