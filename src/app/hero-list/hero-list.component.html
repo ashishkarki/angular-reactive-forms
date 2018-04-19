@@ -3,7 +3,7 @@
 
 <nav>
   <button (click)="getHeroes()" class="btn btn-primary">Refresh</button>
-  <a *ngFor="let hero of heroes | async" (click)="select(hero)" class="btn btn-lg btn-info">{{hero.name}}</a>
+  	<a *ngFor="let hero of heroes | async" (click)="select(hero)" class="btn btn-info btn-margin">{{hero.name}}</a>
 </nav>
 
 <div *ngIf="selectedHero">
