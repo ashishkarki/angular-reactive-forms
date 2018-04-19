@@ -16,9 +16,11 @@ export class HeroDetailComponent implements OnChanges {
 
 	heroForm: FormGroup;
 	states = states;
+	nameChangeLog: string[] = [];
 
 	constructor(private fb: FormBuilder, private heroService: HeroService) {
 		this.createForm();
+		this.logNameChange();
 	}
 
 	createForm() {
@@ -57,6 +59,39 @@ export class HeroDetailComponent implements OnChanges {
 	removeLair(index: number) {
 		this.secretLairs.removeAt(index);
 	}
+
+	logNameChange() {
+		const nameControl = this.heroForm.get('name');
+		nameControl.valueChanges.forEach(
+				(value: string) => this.nameChangeLog.push(value)
+			);
+	}
+
+	onSubmit() {
+		this.hero = this.prepareSaveHero();
+		this.heroService.updateHero(this.hero).subscribe(result => console.log('updating result:', result));
+		this.rebuildForm();
+	}
+
+	prepareSaveHero() {
+		const formModel = this.heroForm.value;
+
+		// deep copy of form model lairs
+		const secretLairsDeepCopy: Address[] = formModel.secretLairs.map(
+			address => Object.assign({}, address)
+		);
+
+		const saveHero: Hero = {
+	    id: this.hero.id,
+	    name: formModel.name as string,
+	    // addresses: formModel.secretLairs // <-- bad!
+	    addresses: secretLairsDeepCopy
+  	};
+
+  return saveHero;
+	}
+
+	revert() { this.rebuildForm(); }
 
 	get secretLairs(): FormArray {
 		return this.heroForm.get(SECRET_LAIR_NAME) as FormArray;
