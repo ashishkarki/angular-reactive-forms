@@ -21,38 +21,10 @@ export class HeroDetailComponent implements OnChanges {
 		this.createForm();
 	}
 
-	// ngOnInit() {
-
-	// 	this.heroService.getHeroes().subscribe(heroes => {
-	// 		const selectedHero = heroes.find(storedHero => storedHero.name === this.hero.name);
-			
-	// 	});
-	// }
-
-	// createForm(selectedHero: Hero) {
-	// 	this.heroForm = this.fb.group({
-	// 		name: [selectedHero.name, Validators.required ],
-	// 		address: this.fb.group({
-	// 			street: selectedHero.addresses[0].street,
-	// 			city: selectedHero.addresses[0].city,
-	// 			state: selectedHero.addresses[0].state,
-	// 			zip: selectedHero.addresses[0].zip
-	// 		}),
-	// 		power: '',
-	// 		sidekick: ''
-	// 	});
-	// }
-
 	createForm() {
 		this.heroForm = this.fb.group({
 			name: ['', Validators.required ],
-			// address: this.fb.group({
-			// 	street: '',
-			// 	city: '',
-			// 	state: '',
-			// 	zip: ''
-			// }),
-			secretLairs: this.fb.array([]),
+			SECRET_LAIR_NAME: this.fb.array([]),
 			power: '',
 			sidekick: ''
 		});
@@ -65,18 +37,11 @@ export class HeroDetailComponent implements OnChanges {
   }
 
   rebuildForm() { // <-- wrap patchValue in rebuildForm
-  	this.heroForm.reset();
-  	this.heroForm.patchValue({
-  		name: this.hero.name
-  		//, address: this.hero.addresses[0] || new Address()
-  	});
+  	this.heroForm.reset({
+			name: this.hero.name,
+			address: this.hero.addresses[0] || new Address()
+		});
   	this.setAddresses(this.hero.addresses);
-
-  	// or we can also do
-  	// this.heroForm.reset({
-  	// 	name: this.hero.name,
-  	// 	address: this.hero.addresses[0] || new Address()
-  	// });
   }
 
   setAddresses(addresses: Address[]) {
