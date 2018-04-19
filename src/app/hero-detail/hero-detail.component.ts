@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 
 import { states, Address, Hero, heroes } from '../data-model';
 import { HeroService } from '../hero.service';
 
+export const SECRET_LAIR_NAME = 'secretLairs';
 
 @Component({
 	selector: 'app-hero-detail',
@@ -45,12 +46,13 @@ export class HeroDetailComponent implements OnChanges {
 	createForm() {
 		this.heroForm = this.fb.group({
 			name: ['', Validators.required ],
-			address: this.fb.group({
-				street: '',
-				city: '',
-				state: '',
-				zip: ''
-			}),
+			// address: this.fb.group({
+			// 	street: '',
+			// 	city: '',
+			// 	state: '',
+			// 	zip: ''
+			// }),
+			secretLairs: this.fb.array([]),
 			power: '',
 			sidekick: ''
 		});
@@ -66,6 +68,24 @@ export class HeroDetailComponent implements OnChanges {
   	this.heroForm.reset();
   	this.heroForm.patchValue({
   		name: this.hero.name
+  		//, address: this.hero.addresses[0] || new Address()
   	});
+  	this.setAddresses(this.hero.addresses);
+
+  	// or we can also do
+  	// this.heroForm.reset({
+  	// 	name: this.hero.name,
+  	// 	address: this.hero.addresses[0] || new Address()
+  	// });
   }
+
+  setAddresses(addresses: Address[]) {
+	  const addressFGs = addresses.map(address => this.fb.group(address));
+	  const addressFormArray = this.fb.array(addressFGs);
+	  this.heroForm.setControl(SECRET_LAIR_NAME, addressFormArray);
+	}
+
+	get secretLairs(): FormArray {
+		return this.heroForm.get(SECRET_LAIR_NAME) as FormArray;
+	}
 }
