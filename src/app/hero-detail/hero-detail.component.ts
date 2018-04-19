@@ -50,6 +50,14 @@ export class HeroDetailComponent implements OnChanges {
 	  this.heroForm.setControl(SECRET_LAIR_NAME, addressFormArray);
 	}
 
+	addLair(){
+		this.secretLairs.push(this.fb.group(new Address()));
+	}
+
+	removeLair(index: number) {
+		this.secretLairs.removeAt(index);
+	}
+
 	get secretLairs(): FormArray {
 		return this.heroForm.get(SECRET_LAIR_NAME) as FormArray;
 	}

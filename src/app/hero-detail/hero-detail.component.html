@@ -1,5 +1,3 @@
-<h2>Hero Detail</h2>
-<h3><i>FormControl in a FormGroup</i></h3>
 <form [formGroup]="heroForm">
 
 	<div class="form-group">
@@ -9,11 +7,12 @@
 	</div>
 
 	<div formArrayName="secretLairs" class="well well-lg">
-   <h4>Secret Lairs</h4>	{{ secretLairs.controls }}
+   <h4>Secret Lairs</h4>	
    <div *ngFor="let address of secretLairs.controls; let i=index" [formGroupName]="i" >
 
     <!-- The repeated address template -->
     <h4>Address #{{i + 1}}</h4>
+    <button class="btn btn-danger" type="button" (click)="removeLair(i)">Remove this Secret Lair</button>
     <div style="margin-left: 1em;">
       <div class="form-group">
         <label class="center-block">Street:
@@ -41,7 +40,7 @@
     <br>
     <!-- End of the repeated address template -->
   </div>
-
+  <button class="btn btn-primary" type="button" (click)="addLair()">Add a new Secret Lair</button>
 
 </div>
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable }        from 'rxjs/Observable';
 import 'rxjs/add/operator/finally';
 
@@ -14,10 +14,16 @@ export class HeroListComponent implements OnInit {
 	heroes: Observable<Hero[]>;
   isLoading = false;
   selectedHero: Hero;
+  @ViewChild('appHero') childHeroComponent;
 
   constructor(private heroService: HeroService) { }
 
   ngOnInit() { this.getHeroes(); }
+
+  ngAfterViewInit() {
+  	console.log('only after THIS EVENT "child" is usable!!');
+  	//this.childHeroComponent.removeLair(0);
+  }
 
   getHeroes() {
     this.isLoading = true;
